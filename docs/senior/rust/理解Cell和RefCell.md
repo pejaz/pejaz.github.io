@@ -58,7 +58,7 @@ impl Messenger for MsgQueue {
 如上所示，外部库中定义了一个消息发送器特征  `Messenger`，它只有一个发送消息的功能：`fn send(&self, msg: String)`，因为发送消息不需要修改自身，因此原作者在定义时，使用了  `&self`  的不可变借用，这个无可厚非。  
 而我们要在自己的代码中使用该特征实现一个异步消息队列，出于性能的考虑，消息先写到本地缓存(内存)中，然后批量发送出去，因此在  `send`  方法中，需要将消息先行插入到本地缓存  `msg_cache`  中。但是由于该  `send`  方法的签名是  `&self`（该定义在外部库中，不能修改为 `&mut self`），因此上述代码会报错。
 
-### ## [Cell](https://course.rs/advance/smart-pointer/cell-refcell.html#cell)
+## [Cell](https://course.rs/advance/smart-pointer/cell-refcell.html#cell)
 
 `Cell`  和  `RefCell`  在功能上没有区别，区别在于  `Cell<T>`  适用于  `T`  实现  `Copy`  的情况：
 
@@ -120,13 +120,13 @@ let s2 = s.borrow_mut(); // 编译器不报错
 println!("{},{}", s1, s2);
 ```
 
-::: danger  
+::: danger ❗️注意
 `RefCell`  实际上并没有解决可变引用和引用可以共存的问题，只是将报错从编译期推迟到运行时，从编译器错误变成了  `panic`  异常，上面代码运行时依然会抛出异常，你需要确保自己的代码是正确的
 :::
 
 ## 总结
 
-1. `Cell` 只适用于 `Copy` 类型，用于提供值，而 `RefCell` 用于提供引用
+1. `Cell` 只适用于 `Copy` 类型（常见的 Copy 类型见 [Rust 中的拷贝和克隆](./Rust%20中的拷贝和克隆.md)），用于提供值，而 `RefCell` 用于提供引用
 2. `Cell` 不会 `panic`，而 `RefCell` 会， `RefCell`只是将借用规则从编译期推迟到程序运行期，并不能帮你绕过这个规则
 3. `RefCell` 适用于需要内部可变性时或者一个引用被在多处代码使用、修改以至于难于管理借用关系时，用来简化程序代码
 4. 优先使用 `Cell`，性能更佳
