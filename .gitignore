@@ -4,3 +4,6 @@ cache
 .temp
 .DS_Store
 .obsidian
+.infio_json_db
+.smtcmp_json_db
+.vscode
