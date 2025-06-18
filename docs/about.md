@@ -2,6 +2,7 @@
 title: 关于我
 date: 2021-1-15
 isShowComments: false
+hidden: true
 ---
 
 ## 👋个人简介
