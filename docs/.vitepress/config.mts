@@ -56,7 +56,7 @@ export default defineConfig({
       next: '下一页',
     },
     // 设置logo
-    logo: '/listen.png',
+    logo: 'https://blog.peigo.top/peigo/favicon.ico',
 
     // editLink: {
     //   pattern:

@@ -4,14 +4,14 @@ layout: home
 blog:
  name: '别来无恙'
  author: '别来无恙'
- logo: /avatar.jpg
+ logo: https://blog.peigo.top/peigo/avatar.jpg
  motto: 每天更新自己，慢慢理解世界
  # inspiring:
  # - 迷茫时读书，忙碌时运动，独处时思考。
  # 设置 inspiringTimeout 可以实现自动切换
  # inspiringTimeout: 3000
  pageSize: 10
- minScreenAvatar: true
+ minScreenAvatar: false
  buttonAfterArticle:
   openTitle: 投币
   closeTitle: 下次一定
