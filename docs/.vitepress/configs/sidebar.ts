@@ -1,32 +1,52 @@
-import { readdirSync } from 'node:fs';
+import { writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { DirnameTranslateMap } from './dirname-translate.ts'
+import { sidebarCache } from './sidebar-cache.ts'
+import { getDirs, getMDFiles, stringifyWithTrailingCommas } from './utils.ts'
 
-const excludeDir = ['.vitepress', 'public']
+const __dirname = import.meta.dirname
+
+export const excludeDir = ['.vitepress', 'public']
 const sidebar = {}
 
-const getDirs = (path) => {
-  return readdirSync(path, { withFileTypes: true })
-  .filter(d => d.isDirectory() && !excludeDir.includes(d.name))
-}
-const getMDFiles = (path) => {
-  return readdirSync(path, { withFileTypes: true })
-  .filter(f => f.isFile() && f.name.endsWith('.md'))
-}
-
+const sidebarJson = {}
 getDirs('./docs').forEach(d => {
-    sidebar[`/${d.name}`] = getDirs(`./docs/${d.name}`).map(subDir => {
+  sidebar[`/${d.name}`] = getDirs(`./docs/${d.name}`).map(subDir => {
+    const subDirPath = `./docs/${d.name}/${subDir.name}`
+    let globalIdx = sidebarCache[subDirPath]?.filter(Boolean).length || 0
+
+    const files = getMDFiles(subDirPath)
+      .map(md => {
+        const name = md.name.replace('.md$', '')
+        const link = `/${d.name}/${subDir.name}/${name}`
+        const idx = sidebarCache[subDirPath]?.indexOf(name) ?? globalIdx++
+
         return {
-            text: DirnameTranslateMap[subDir.name] || subDir.name,
-            collapsed: true,
-            items: getMDFiles(`./docs/${d.name}/${subDir.name}`).map((md,idx) => {
-              const name = md.name.replace('\.md$', '')
-                return {
-                    text: `${idx+1}. ${name}`,
-                    link: `/${d.name}/${subDir.name}/${name}`
-                }
-            })
+          idx,
+          name,
+          link,
         }
-    })
+      })
+      .sort((a, b) => a.idx - b.idx)
+
+    sidebarJson[subDirPath] = files.map(file => file.name)
+
+    return {
+      text: DirnameTranslateMap[subDir.name] || subDir.name,
+      collapsed: true,
+      items: files.map((file, idx) => {
+        return {
+          text: `${idx + 1}. ${file.name}`,
+          link: file.link,
+        }
+      }),
+    }
   })
+})
+
+writeFileSync(
+  resolve(__dirname, 'sidebar-cache.ts'),
+  `export const sidebarCache = ${stringifyWithTrailingCommas(sidebarJson, 2)};`
+)
 
 export { sidebar }
