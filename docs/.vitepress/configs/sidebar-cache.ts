@@ -48,6 +48,7 @@ export const sidebarCache = {
     "大模型提示词技巧.md",
     "AI设计模式理解与能力选择.md",
     "RAG查询质量优化.md",
+    "AI信息片段随记.md",
   ],
   "./docs/senior/frontend": [
     "Vue与React各个生命周期.md",
