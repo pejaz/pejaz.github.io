@@ -17,9 +17,10 @@ publish: true
 8. 工作流： dify、coze、n8n 等智能体工作流平台
 9. AI 绘图领域：Stable Diffusion、 Black Forest Labs 团队的 FLUX 、智谱清言的 CogView 模型以及快手的可灵 AI
 10. 语音合成：火山引擎
-11. 视觉合成：Kimi 视觉模型
+11. 视觉合成：Kimi 视觉模型、 字节即梦 AI
 12. 语音识别：Azure
 13. 海外文件存储和 CDN：Bunny.net
+14. 国内主流模型（截止 2025-09-01）：智谱 GLM-4.5V、DeepSeekV3.1、Kimi-K2、Qwen3-Coder
 
 ## 中文向量模型
 
