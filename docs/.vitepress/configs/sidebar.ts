@@ -7,12 +7,12 @@ import { getDirs, getMDFiles, stringifyWithTrailingCommas } from './utils.ts'
 const __dirname = import.meta.dirname
 
 export const excludeDir = ['.vitepress', 'public']
-const sidebar = {}
+const sidebar: Record<string, any> = {}
 
-const sidebarJson = {}
+const sidebarJson: Record<string, any> = {}
 getDirs('./docs').forEach(d => {
   sidebar[`/${d.name}`] = getDirs(`./docs/${d.name}`).map(subDir => {
-    const subDirPath = `./docs/${d.name}/${subDir.name}`
+    const subDirPath = `./docs/${d.name}/${subDir.name}` as keyof typeof sidebarCache
     let globalIdx = sidebarCache[subDirPath]?.filter(Boolean).length || 0
 
     const files = getMDFiles(subDirPath)
@@ -32,7 +32,7 @@ getDirs('./docs').forEach(d => {
     sidebarJson[subDirPath] = files.map(file => file.name)
 
     return {
-      text: DirnameTranslateMap[subDir.name] || subDir.name,
+      text: DirnameTranslateMap[subDir.name as keyof typeof DirnameTranslateMap] || subDir.name,
       collapsed: true,
       items: files.map((file, idx) => {
         return {
